@@ -14,6 +14,21 @@ This application will be a basic reservation system for booking appointments and
 * ability to cancel or comfirm via text
 * automatic Text reminders
 
+
+## Getting Started
+
+Install packages 
+```
+yarn install
+```
+
+start dev server on **localhost:1234**
+```
+yarn start
+```
+
+
+
 This project is a proof of concept to show how we can levrage core services to build a robust system...so...
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL WE BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
