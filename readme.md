@@ -8,12 +8,12 @@ This application will be a basic reservation system for booking appointments and
 * Twilio
 
 ### Features (wishlist)
-* Ability to find and reserve a slot based on a Resource (person, Room)
-* admin Dashboard for viewing and editing
-* Text message confirmation
-* ability to cancel or comfirm via text
-* automatic Text reminders
-
+* Ability to find a slot based on a Resource (person, Room)
+* Ability to reserve a slot based on a Resource (person, Room)
+* Admin Dashboard for viewing and editing appointments
+* Ability to confirm and cancel an appointment via text
+* Sending automatic text message reminders
+ 
 
 ## Getting Started
 
