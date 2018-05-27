@@ -1,7 +1,7 @@
 
 import firebase from '@firebase/app';
 import '@firebase/firestore';
-import config  from './db/config.js';
+import config  from './config.js';
 
 
 // Initialize Firebase
