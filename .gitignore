@@ -1,5 +1,5 @@
 node_modules
-app/db/*
-dist
+app/config.js
+public
 .cache
 yarn-error.log
