@@ -19,14 +19,39 @@ This application will be a basic reservation system for booking appointments and
 
 Install packages 
 ```
-yarn install
+yarn
 ```
 
-start dev server on **localhost:1234**
+start dev server on **localhost:1234** (creates `local` directory)
 ```
 yarn start
 ```
 
+Since we are using Parcel JS and babel you are free to use modern js features such as import statements.
+
+## Functions
+
+test functions on local machine
+```
+//cd into function directory
+cd functions
+
+//run the local function server
+yarn serve
+```
+
+
+## Production
+
+build minified bundle for production (creates `public` directory)
+```
+yarn build
+```
+
+deletes `public`, `local`, `.cache` directories
+```
+yarn clean
+```
 
 
 This project is a proof of concept to show how we can levrage core services to build a robust system...so...

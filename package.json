@@ -7,7 +7,9 @@
   "author": "Ivan Villa <ivan@wearescribe.com>",
   "license": "MIT",
   "scripts": {
-    "start": "parcel index.html"
+    "start": "parcel index.html --out-dir local",
+    "build": "parcel build index.html --out-dir public",
+    "clean": "rm -r public && rm -r .cache && rm -r local"
   },
   "dependencies": {
     "@firebase/app": "^0.3.2",
