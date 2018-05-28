@@ -1,7 +1,5 @@
 {
   "projects": {
-    "default": "reservation-poc-370af",
-    "dev": "reservation-poc-370af",
-    "production":"reservation-poc-370af"
+    "default": "simple-reservation-app"
   }
 }
