@@ -1,5 +1,6 @@
 node_modules
 app/config.js
+functions/config.js
 public
 .cache
 yarn-error.log
