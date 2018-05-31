@@ -15,22 +15,15 @@ const settings = { timestampsInSnapshots: true };
 firestore.settings(settings);
 
 // get list of barbers 
-/* barberId (doc.id)
-   barberName (doc.data().name)
-*/
 firestore.collection("Barbers").get().then(function (querySnapshot) {
   console.log("List of barbers:");
   querySnapshot.forEach(function (doc) {
     // doc.data() is never undefined for query doc snapshots
-
     console.log(doc.id, " => ", doc.data().name);
   });
 });
 
 // get availability of the barber
-/* barber's name (doc.data().name)
-   barber's availability (doc.data().availability)
-*/
 var docRef = firestore.collection("Barbers").doc("0sWlR1CindzQB2lp10Yk");
 docRef.get().then(function (doc) {
   if (doc.exists) {
@@ -44,9 +37,6 @@ docRef.get().then(function (doc) {
 });
 
 // get all reservations
-/* reservationID (doc.id)
-   reservationInformation (doc.data)
-*/
 firestore.collection("Reservations").get().then(function (querySnapshot) {
   console.log("All Reservations:");
   querySnapshot.forEach(function (doc) {
@@ -56,10 +46,8 @@ firestore.collection("Reservations").get().then(function (querySnapshot) {
 });
 
 // get the list of services which barber provides
-/* barber's name (doc.data().name)
-   barber's services (doc.data().services)
-*/
 var docRef = firestore.collection("Barbers").doc("0sWlR1CindzQB2lp10Yk");
+// get document snapshot
 docRef.get().then(function (doc) {
   if (doc.exists) {
     console.log(doc.data().name + "'s services:", doc.data().services);
@@ -81,31 +69,11 @@ var docRef = firestore.collection("Clients").doc("BhwmcNPMA0rpxiMKGp4r").collect
     });
   });
 
-var docRef = firestore.collection("Barbers").doc("cNqgHD5XWj2TVFNTojZ0");
 
-
-/*var resID = "FDAFDAFADSFASDFASD";
-var slot = "1300";
-
-firestore.runTransaction(function(transaction) {
-  // This code may get re-run multiple times if there are conflicts.
-  return transaction.get(docRef).then(function(doc) {
-      if (!doc.exists) {
-          throw "Document does not exist!";
-      }
-      console.log(doc.data().availability);
-      var availabilityArray = doc.data().availability;
-      availabilityArray.push({ reservationID: resID, slot: slot});
-      transaction.update(docRef, {availability: availabilityArray});
-  });
-}).then(function() {
-    console.log("Transaction successfully committed!");
-}).catch(function(error) {
-    console.log("Transaction failed: ", error);
-});*/
-
+// Add new reservation into database
+/*var docRef = firestore.collection("Barbers").doc("cNqgHD5XWj2TVFNTojZ0");
 var barberName = "John";
-var clientName = "Sam";
+var clientName = "Ivan";
 var clientPhone = "9187867722";
 var service = "trim";
 var duration = "30min";
@@ -113,95 +81,168 @@ var favourite = true;
 var slot = "1300";
 var status = "waiting";
 
-// add new reservation (id of the document is generated automatically)
-firestore.collection("Reservations").add({
-  barberName: barberName,
-  clientName: clientName,
-  clientPhone: clientPhone,
-  service: service,
-  duration: duration,
-  favourite: favourite,
-  slot: slot,
-  status: status
-})
-.then(function(docRef) {
-  var resID = docRef.id;
-  var slot = 1300;
-  var docRef = firestore.collection("Barbers").doc("cNqgHD5XWj2TVFNTojZ0");
-  firestore.runTransaction(function(transaction) {
-    console.log(docRef);
-    // This code may get re-run multiple times if there are conflicts.
-    return transaction.get(docRef).then(function(doc) {
-        if (!doc.exists) {
-            throw "Document does not exist!";
-        }
-        console.log(doc.data().availability);
-        var availabilityArray = doc.data().availability;
-        availabilityArray.push({ reservationID: resID, slot: slot});
-        transaction.update(docRef, {availability: availabilityArray});
-    });
-  }).then(function() {
-      console.log("Transaction successfully committed!");
-  }).catch(function(error) {
-      console.log("Transaction failed: ", error);
-  });
-  var docRef = firestore.collection("Barbers").doc("cNqgHD5XWj2TVFNTojZ0");
-  firestore.runTransaction(function(transaction) {
-    console.log(docRef);
-    // This code may get re-run multiple times if there are conflicts.
-    return transaction.get(docRef).then(function(doc) {
-        if (!doc.exists) {
-            throw "Document does not exist!";
-        }
-        console.log(doc.data().availability);
-        var availabilityArray = doc.data().availability;
-        availabilityArray.push({ reservationID: resID, slot: slot});
-        transaction.update(docRef, {availability: availabilityArray});
-    });
-  }).then(function() {
-      console.log("Transaction successfully committed!");
-  }).catch(function(error) {
-      console.log("Transaction failed: ", error);
-  });
 
-  firestore.collection("Clients").where("name", "==", clientName)
-  .get()
-  .then(function (querySnapshot) {
-    querySnapshot.forEach(function (doc) {
-      // doc.data() is never undefined for query doc snapshots
-      var docRef = firestore.collection("Clients").doc(doc.id).collection("reservations").add({
-        barberName: barberName,
-        service: service,
-        duration: duration,
-        favourite: favourite
-      })
+firestore.collection("Reservations").add({
+    barberName: barberName,
+    clientName: clientName,
+    clientPhone: clientPhone,
+    service: service,
+    duration: duration,
+    favourite: favourite,
+    slot: slot,
+    status: status
+}).then(function(docRef) {
+    var resID = docRef.id;
+    var slot = 1300;
+    var availability = {};
+    availability[resID] = slot;
+
+    firestore.collection("Barbers").doc("cNqgHD5XWj2TVFNTojZ0").set({
+        availability
+      }, { merge: true }).then(function() {
+        firestore.collection("Clients").where("name", "==", clientName).get().then(function (querySnapshot) {
+            if (querySnapshot.size > 0){
+                querySnapshot.forEach(function (doc) {
+                    // doc.data() is never undefined for query doc snapshots
+                    console.log(resID);
+                    var docRef = firestore.collection("Clients").doc(doc.id).collection("reservations").doc(resID).set({
+                        barberName: barberName,
+                        service: service,
+                        duration: duration,
+                        favourite: favourite
+                    })
+                });
+            } else {
+                console.log('no documents found');
+            }
+        });
+    })
+    .catch(function(error) {
+        console.error("Error writing document: ", error);
     });
-  })
-  .catch(function (error) {
-    console.log("Error getting documents: ", error);
-  });
 })
 .catch(function(error) {
   console.error("Error adding document: ", error);
-});
+});*/
 
-/*firestore.collection("Clients").where("name", "==", "Anna")
-  .get()
-  .then(function (querySnapshot) {
-    querySnapshot.forEach(function (doc) {
-      // doc.data() is never undefined for query doc snapshots
-      var docRef = firestore.collection("Clients").doc(doc.id).collection("reservations").add({
-        barberName: "John",
-        service: "trim",
-        duration: "30min",
-        favourite: true
-      })
+/*
+// delete reservation from the database
+var clientName = "Ivan";
+var resID = "10D4GkyOqQMhsBuvrzb1";
+
+firestore.collection("Reservations").doc(resID).delete().then(function() {
+    console.log("Document successfully deleted!");
+    var reserField = "availability." + resID;
+    console.log(reserField);
+    firestore.collection("Barbers").where("availability.10D4GkyOqQMhsBuvrzb1", "==", 1300).get().then(function (querySnapshot) {
+        if (querySnapshot.size > 0){
+            querySnapshot.forEach(function (doc) {
+                console.log(doc);
+                // doc.data() is never undefined for query doc snapshots      
+                var barberRef = firestore.collection('Barbers').doc(doc.id);
+
+                var removeReservationID = barberRef.update({
+                    "availability.10D4GkyOqQMhsBuvrzb1" : firebase.firestore.FieldValue.delete()
+                });                
+              });
+        } else {
+            console.log('no documents found');
+        }
+        firestore.collection("Clients").where("name", "==", clientName).get().then(function (querySnapshot) {
+            if (querySnapshot.size > 0){
+                querySnapshot.forEach(function (doc) {
+                    // doc.data() is never undefined for query doc snapshots
+                    console.log(resID);
+                    firestore.collection("Clients").doc(doc.id).collection("reservations").doc(resID).delete().then(function(){
+                        console.log("Document successfully deleted!");
+                    }).catch(function(error) {
+                        console.error("Error removing document: ", error);
+                    });
+                });
+            } else {
+                console.log('no documents found');
+            }
+        });  
     });
-  })
-  .catch(function (error) {
-    console.log("Error getting documents: ", error);
-  });
-*/
+}).catch(function(error) {
+    console.error("Error removing document: ", error);
+});*/
+
+/*
+// delete reservation spot from the barber
+firestore.collection("Barbers").where("availability.10D4GkyOqQMhsBuvrzb1", "==", 1300).get().then(function (querySnapshot) {
+    if (querySnapshot.size > 0){
+        querySnapshot.forEach(function (doc) {
+            console.log(doc);
+            // doc.data() is never undefined for query doc snapshots      
+            var barberRef = firestore.collection('Barbers').doc(doc.id);
+
+            var removeReservationID = barberRef.update({
+                "availability.10D4GkyOqQMhsBuvrzb1" : firebase.firestore.FieldValue.delete()
+            });                
+          });
+    } else {
+        console.log('no documents found');
+    }
+});*/
+
+// check if barber is available that time
+/*firestore.collection("Barbers").where("availability.10D4GkyOqQMhsBuvrzb1", "==", 1300).get().then(function (querySnapshot) {
+    if (querySnapshot.size > 0){
+        console.log(querySnapshot);
+        querySnapshot.forEach(function (doc) {
+            // doc.data() is never undefined for query doc snapshots      
+            console.log("ReservationID(" + doc.id + ")", " => ", doc.data());
+          });
+    } else {
+        console.log('no documents found');
+    }
+  });*/
+
+  //add field to the object
+  /*var resID = "cNqgHD5XWj2TVFNToj111";
+  var slot = 1300;
+  var availability = {};
+  availability[resID] = slot;
+  var docRef = firestore.collection("Barbers").doc("cNqgHD5XWj2TVFNTojZ0").set({
+    availability
+  }, { merge: true });*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*exports.getAllTodos = function (req, res) {
   getTodos().
