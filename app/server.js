@@ -209,6 +209,13 @@ firestore.collection("Barbers").where("availability.10D4GkyOqQMhsBuvrzb1", "==",
   }, { merge: true });*/
 
 
+//update status of the reservation
+firestore.collection("Reservations").doc("ZRs7w3kzbVYGI2AbvisJ").update({
+    "status": "confirmed"
+})
+.then(function() {
+    console.log("Document successfully updated!");
+});
 
 
 
