@@ -3,3 +3,5 @@ app/config.js
 public
 .cache
 yarn-error.log
+dist 
+local
