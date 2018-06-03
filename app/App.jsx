@@ -2,11 +2,11 @@ import React from 'react';
 import { render } from 'react-dom';
 import './server.js';
 
-import Hello from './components/Hello';
+import Main from './components/Main';
 
 //Main App
 const App = () => (
-  <Hello />
+  <Main />
 );
 
 render(<App />, document.getElementById('app'));
