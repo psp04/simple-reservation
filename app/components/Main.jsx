@@ -18,6 +18,8 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+import firestore from '../server.js';
+
 
 const styles = theme => ({
   root: {
@@ -55,12 +57,19 @@ class Main extends React.Component {
   
   constructor(props){
     super(props);
-    this.state = { barberList: []}
-  
+    this.state = { 
+      barberList: {}
+    }  
   }
 
   componentDidMount() {
-
+    var barbers = {};
+    firestore.collection("Barbers").get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) =>  {        
+        barbers[doc.id] = doc.data().name;
+      });
+      this.setState({ barberList: barbers });
+    });
   }
 
   componentWillUnmount() {
@@ -111,20 +120,18 @@ class Main extends React.Component {
                   }}
                 />
                 <FormControl className={classes.formControl}>
-                  <InputLabel htmlFor="barberId">Barber/stylist</InputLabel>
-                  <Select
-                    value=""
+                  <InputLabel htmlFor="barberList">Barber/stylist</InputLabel>
+                  <Select value=""
                     inputProps={{
                       name: 'barberName',
-                      id: 'barberId',
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Missy</MenuItem>
-                    <MenuItem value={20}>John</MenuItem>
-                    <MenuItem value={30}>Becca</MenuItem>
+                      id: 'index',
+                    }}>
+                    {this.state.barberList &&
+                      Object.keys(this.state.barberList).map((index) => {
+                        var barberName = this.state.barberList[index];
+                        return <MenuItem key={index} value={index}>{barberName}</MenuItem>
+                      })
+                    }
                   </Select>
                 </FormControl>
                 <FormControl className={classes.formControl}>
