@@ -14,10 +14,4 @@ const firestore = firebase.firestore();
 const settings = {timestampsInSnapshots: true};
 firestore.settings(settings);
 
-// get all documents in a collection
-firestore.collection("Clients").get().then(function(querySnapshot) {
-  querySnapshot.forEach(function(doc) {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-  });
-});
+module.exports = firestore;
