@@ -58,8 +58,16 @@ class Main extends React.Component {
   constructor(props){
     super(props);
     this.state = { 
-      barberList: {}
-    }  
+      barberList: {},
+      selectedBarber: "",
+      reservationDate: "",
+      reservationTime: "",
+      clientName: "",
+      clientPhone: "",
+      barberServices: "",
+      selectedService: ""
+    },
+    this.handleChange = this.handleChange.bind(this)
   }
 
   componentDidMount() {
@@ -70,11 +78,31 @@ class Main extends React.Component {
       });
       this.setState({ barberList: barbers });
     });
+
+
+
   }
 
   componentWillUnmount() {
     
   }
+
+  handleChange(event){
+    this.setState({ [event.target.name]: event.target.value });
+    if (event.target.name == "selectedBarber"){
+      console.log(event.target.value);
+      var docRef = firestore.collection("Barbers").doc(event.target.value);
+      docRef.get().then((doc)  => {
+        if (doc.exists) {
+          console.log(doc.data().services)
+          this.setState({ barberServices: doc.data().services });
+        }else {
+          console.log("Barber doesn't exist in the database!");
+        }
+      });
+    }
+  }
+
 
   render(){
     const { classes } = this.props;
@@ -100,7 +128,9 @@ class Main extends React.Component {
                   id="date"
                   label="Date"
                   type="date"
-                  defaultValue="2018-06-03"
+                  name="reservationDate"
+                  value={this.state.reservationDate}
+                  onChange={this.handleChange}
                   className={classes.textField}
                   InputLabelProps={{
                     shrink: true,
@@ -110,7 +140,9 @@ class Main extends React.Component {
                   id="time"
                   label="Time"
                   type="time"
-                  defaultValue="10:00"
+                  name="reservationTime"
+                  value={this.state.reservationTime}
+                  onChange={this.handleChange}
                   className={classes.textField}
                   InputLabelProps={{
                     shrink: true,
@@ -121,9 +153,10 @@ class Main extends React.Component {
                 />
                 <FormControl className={classes.formControl}>
                   <InputLabel htmlFor="barberList">Barber/stylist</InputLabel>
-                  <Select value=""
+                  <Select 
+                    value={this.state.selectedBarber} onChange={this.handleChange}
                     inputProps={{
-                      name: 'barberName',
+                      name: 'selectedBarber',
                       id: 'index',
                     }}>
                     {this.state.barberList &&
@@ -135,35 +168,39 @@ class Main extends React.Component {
                   </Select>
                 </FormControl>
                 <FormControl className={classes.formControl}>
-                  <InputLabel htmlFor="serviceId">Service</InputLabel>
+                  <InputLabel htmlFor="service">Service</InputLabel>
                   <Select
-                    value=""
+                    value={this.state.selectedService}
+                    onChange={this.handleChange}
                     inputProps={{
-                      name: 'serviceName',
-                      id: 'serviceId',
+                      name: 'selectedService',
+                      id: 'index',
                     }}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Long cut</MenuItem>
-                    <MenuItem value={20}>Short cut</MenuItem>
-                    <MenuItem value={30}>Trim</MenuItem>
+                  {this.state.barberServices &&
+                    this.state.barberServices.map((service,index) => {
+                      return <MenuItem key={index} value={service}>{service}</MenuItem>
+                    })
+                  }
                   </Select>
                 </FormControl>
                 <TextField
                   id="name"
                   label="Fullname"
+                  onChange={this.handleChange}
                   className={classes.textField}
-                  value=""
+                  value={this.state.clientName}
                   margin="normal"
+                  name="clientName"
                 />
                 <TextField
                   id="phone"
                   label="Phone number"
+                  onChange={this.handleChange}
                   className={classes.textField}
-                  value=""
+                  value={this.state.clientPhone}
                   margin="normal"
+                  name="clientPhone"
                 />
                 <Button className={classes.button} type="submit">Make reservation</Button>
               </form>
