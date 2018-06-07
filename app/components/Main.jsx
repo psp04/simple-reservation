@@ -34,7 +34,7 @@ const styles = theme => ({
   },
   container: {
     display: 'flex',
-    //flexWrap: 'wrap',
+    flexDirection: 'column'
   },
   textField: {
     marginLeft: theme.spacing.unit,
@@ -59,7 +59,7 @@ class Main extends React.Component {
     super(props);
     this.state = { 
       barberList: {},
-      selectedBarber: "",
+      selectedBarber: { id: "", name: ""},
       reservationDate: "",
       reservationTime: "",
       clientName: "",
@@ -78,23 +78,85 @@ class Main extends React.Component {
       });
       this.setState({ barberList: barbers });
     });
-
-
-
   }
 
   componentWillUnmount() {
     
   }
 
+  handleSubmit(event){
+    event.preventDefault();    
+
+    var docRef = firestore.collection("Barbers").doc(this.state.selectedBarber.id); 
+    var barberName = this.state.selectedBarber.name;
+    var clientName = this.state.clientName;
+    var clientPhone = this.state.clientPhone;
+    var service = this.state.selectedService;
+    var duration = "30min";
+    var favourite = true;
+    var slot = this.state.reservationTime.split(':').join('');
+    var status = "waiting";
+
+    // add new reservation in the database
+    firestore.collection("Reservations").add({
+        barberName: barberName,
+        clientName: clientName,
+        clientPhone: clientPhone,
+        service: service,
+        duration: duration,
+        favourite: favourite,
+        slot: slot,
+        status: status
+    }).then((docRef) => {
+        var resID = docRef.id;
+        var availability = {};
+        availability[resID] = slot;
+        // add reserved slot in barber's availability object
+        firestore.collection("Barbers").doc(this.state.selectedBarber.id).set({
+            availability
+          }, { merge: true }).then(() => {
+            // check if customer already exists in the database
+            firestore.collection("Clients").where("name", "==", clientName).get().then(function (querySnapshot) {
+                if (querySnapshot.size > 0){
+                    querySnapshot.forEach(function (doc) {
+                        console.log(resID);
+                        // add the new reservation document in the collection of reservation documents
+                        var docRef = firestore.collection("Clients").doc(doc.id).collection("reservations").doc(resID).set({
+                            barberName: barberName,
+                            service: service,
+                            duration: duration,
+                            favourite: favourite
+                        })
+                    });
+                } else {
+                    console.log('no documents found');
+                }
+            });
+        })
+        .catch(function(error) {
+            console.error("Error writing document: ", error);
+        });
+    })
+    .catch(function(error) {
+      console.error("Error adding document: ", error);
+    });
+
+  }
+
   handleChange(event){
     this.setState({ [event.target.name]: event.target.value });
+    // create object with id and name of the barber
     if (event.target.name == "selectedBarber"){
-      console.log(event.target.value);
+      let selBarber = Object.assign({}, this.state.selectedBarber); 
+      selBarber.id = event.target.value;
+      var index = event.target.selectedIndex;
+      selBarber.name = event.target[index].text
+      this.setState({ selectedBarber:selBarber });
+      
+      // get the services which barber provides
       var docRef = firestore.collection("Barbers").doc(event.target.value);
       docRef.get().then((doc)  => {
         if (doc.exists) {
-          console.log(doc.data().services)
           this.setState({ barberServices: doc.data().services });
         }else {
           console.log("Barber doesn't exist in the database!");
@@ -123,7 +185,7 @@ class Main extends React.Component {
               </Toolbar>
             </AppBar>
             <Grid item xs={12}>
-              <form className={classes.container} noValidate autoComplete="off">
+              <form className={classes.container} noValidate autoComplete="off" onSubmit={event => this.handleSubmit(event)}>
                 <TextField
                   id="date"
                   label="Date"
@@ -154,7 +216,9 @@ class Main extends React.Component {
                 <FormControl className={classes.formControl}>
                   <InputLabel htmlFor="barberList">Barber/stylist</InputLabel>
                   <Select 
-                    value={this.state.selectedBarber} onChange={this.handleChange}
+                    value={this.state.selectedBarber.id} 
+                    onChange={this.handleChange}
+                    native={true}
                     inputProps={{
                       name: 'selectedBarber',
                       id: 'index',
@@ -162,7 +226,7 @@ class Main extends React.Component {
                     {this.state.barberList &&
                       Object.keys(this.state.barberList).map((index) => {
                         var barberName = this.state.barberList[index];
-                        return <MenuItem key={index} value={index}>{barberName}</MenuItem>
+                        return <option key={index} value={index}>{barberName}</option>
                       })
                     }
                   </Select>
@@ -172,6 +236,7 @@ class Main extends React.Component {
                   <Select
                     value={this.state.selectedService}
                     onChange={this.handleChange}
+                    native={true}
                     inputProps={{
                       name: 'selectedService',
                       id: 'index',
@@ -179,7 +244,7 @@ class Main extends React.Component {
                   >
                   {this.state.barberServices &&
                     this.state.barberServices.map((service,index) => {
-                      return <MenuItem key={index} value={service}>{service}</MenuItem>
+                      return <option key={index} value={service}>{service}</option>
                     })
                   }
                   </Select>
