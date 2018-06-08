@@ -87,7 +87,6 @@ class Main extends React.Component {
   handleSubmit(event){
     event.preventDefault();    
 
-    var docRef = firestore.collection("Barbers").doc(this.state.selectedBarber.id); 
     var barberName = this.state.selectedBarber.name;
     var clientName = this.state.clientName;
     var clientPhone = this.state.clientPhone;
@@ -107,8 +106,8 @@ class Main extends React.Component {
         favourite: favourite,
         slot: slot,
         status: status
-    }).then((docRef) => {
-        var resID = docRef.id;
+    }).then((doc) => {
+        var resID = doc.id;
         var availability = {};
         availability[resID] = slot;
         // add reserved slot in barber's availability object
@@ -116,12 +115,12 @@ class Main extends React.Component {
             availability
           }, { merge: true }).then(() => {
             // check if customer already exists in the database
-            firestore.collection("Clients").where("name", "==", clientName).get().then(function (querySnapshot) {
+            firestore.collection("Clients").where("name", "==", clientName).get().then((querySnapshot) => {
                 if (querySnapshot.size > 0){
                     querySnapshot.forEach(function (doc) {
                         console.log(resID);
                         // add the new reservation document in the collection of reservation documents
-                        var docRef = firestore.collection("Clients").doc(doc.id).collection("reservations").doc(resID).set({
+                        firestore.collection("Clients").doc(doc.id).collection("reservations").doc(resID).set({
                             barberName: barberName,
                             service: service,
                             duration: duration,
@@ -129,8 +128,19 @@ class Main extends React.Component {
                         })
                     });
                 } else {
-                    console.log('no documents found');
-                }
+                  // customer doesn't exist in the table - create a new one
+                  firestore.collection("Clients").add({
+                    clientName: clientName,
+                    clientPhone: clientPhone
+                  }).then((doc) => {
+                    firestore.collection("Clients").doc(doc.id).collection("reservations").doc(resID).set({
+                      barberName: barberName,
+                      service: service,
+                      duration: duration,
+                      favourite: favourite
+                    })
+                  })
+                };
             });
         })
         .catch(function(error) {
@@ -154,8 +164,8 @@ class Main extends React.Component {
       this.setState({ selectedBarber:selBarber });
       
       // get the services which barber provides
-      var docRef = firestore.collection("Barbers").doc(event.target.value);
-      docRef.get().then((doc)  => {
+      var doc = firestore.collection("Barbers").doc(event.target.value);
+      doc.get().then((doc)  => {
         if (doc.exists) {
           this.setState({ barberServices: doc.data().services });
         }else {
