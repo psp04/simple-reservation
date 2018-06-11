@@ -22,6 +22,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import firestore from '../server.js';
 
@@ -74,7 +75,8 @@ class Main extends React.Component {
       clientPhone: "",
       barberServices: "",
       selectedService: "",
-      reservationList: []
+      reservationList: [],
+      selectedReservations: []
     },
     this.handleChange = this.handleChange.bind(this)
   }
@@ -196,6 +198,29 @@ class Main extends React.Component {
     }
   }
 
+  handleClick(event, id) {
+    const { selectedReservations } = this.state;
+    const selectedIndex = selectedReservations.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selectedReservations, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selectedReservations.slice(1));
+    } else if (selectedIndex === selectedReservations.length - 1) {
+      newSelected = newSelected.concat(selectedReservations.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selectedReservations.slice(0, selectedIndex),
+        selectedReservations.slice(selectedIndex + 1),
+      );
+    }
+    this.setState({ selectedReservations: newSelected });
+  };
+
+  isSelected(id){
+    this.state.selectedReservations.indexOf(id) !== -1;
+  } 
 
   render(){
     const { classes } = this.props;
@@ -318,8 +343,20 @@ class Main extends React.Component {
               </TableHead>
               <TableBody>
                 {this.state.reservationList.map(res => {
+                  const isSelected = this.isSelected(res.id);
                   return (
-                    <TableRow key={res.id}>
+                    <TableRow 
+                      key={res.id} 
+                      hover
+                      selected={isSelected} 
+                      role="checkbox"
+                      aria-checked={isSelected}
+                      tabIndex={-1}
+                      onClick={event => this.handleClick(event,res.id)}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox checked={isSelected} />
+                      </TableCell>
                       <TableCell>{res.id}</TableCell>
                       <TableCell>{res.barberName}</TableCell>
                       <TableCell>{res.clientName}</TableCell>
