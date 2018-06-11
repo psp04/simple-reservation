@@ -17,6 +17,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 import firestore from '../server.js';
 
@@ -51,6 +56,9 @@ const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
   },
+  table: {
+    minWidth: 700,
+  },
 });
 
 class Main extends React.Component {
@@ -65,25 +73,39 @@ class Main extends React.Component {
       clientName: "",
       clientPhone: "",
       barberServices: "",
-      selectedService: ""
+      selectedService: "",
+      reservationList: []
     },
     this.handleChange = this.handleChange.bind(this)
   }
 
   componentDidMount() {
+
+    // get all barbers
     var barbers = {};
+    var reservations = [];
     firestore.collection("Barbers").get().then((querySnapshot) => {
       querySnapshot.forEach((doc) =>  {        
         barbers[doc.id] = doc.data().name;
       });
       this.setState({ barberList: barbers });
     });
+
+    // get all reservations
+    firestore.collection("Reservations").get().then((querySnapshot) => {
+      querySnapshot.forEach(function (doc) {
+        var reservation = doc.data();
+        reservation.id = doc.id;
+        reservations.push(reservation);        
+      });
+      this.setState({ reservationList: reservations });
+    });
   }
 
   componentWillUnmount() {
     
   }
-
+  
   handleSubmit(event){
     event.preventDefault();    
 
@@ -150,7 +172,6 @@ class Main extends React.Component {
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
-
   }
 
   handleChange(event){
@@ -194,92 +215,124 @@ class Main extends React.Component {
                 <Button color="inherit">Login</Button>
               </Toolbar>
             </AppBar>
-            <Grid item xs={12}>
-              <form className={classes.container} noValidate autoComplete="off" onSubmit={event => this.handleSubmit(event)}>
-                <TextField
-                  id="date"
-                  label="Date"
-                  type="date"
-                  name="reservationDate"
-                  value={this.state.reservationDate}
+          </Grid>
+          <Grid item xs={12}>
+            <form className={classes.container} noValidate autoComplete="off" onSubmit={event => this.handleSubmit(event)}>
+              <TextField
+                id="date"
+                label="Date"
+                type="date"
+                name="reservationDate"
+                value={this.state.reservationDate}
+                onChange={this.handleChange}
+                className={classes.textField}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <TextField
+                id="time"
+                label="Time"
+                type="time"
+                name="reservationTime"
+                value={this.state.reservationTime}
+                onChange={this.handleChange}
+                className={classes.textField}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputProps={{
+                  step: 300, // 5 min
+                }}
+              />
+              <FormControl className={classes.formControl}>
+                <InputLabel htmlFor="barberList">Barber/stylist</InputLabel>
+                <Select 
+                  value={this.state.selectedBarber.id} 
                   onChange={this.handleChange}
-                  className={classes.textField}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-                <TextField
-                  id="time"
-                  label="Time"
-                  type="time"
-                  name="reservationTime"
-                  value={this.state.reservationTime}
-                  onChange={this.handleChange}
-                  className={classes.textField}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
+                  native={true}
                   inputProps={{
-                    step: 300, // 5 min
-                  }}
-                />
-                <FormControl className={classes.formControl}>
-                  <InputLabel htmlFor="barberList">Barber/stylist</InputLabel>
-                  <Select 
-                    value={this.state.selectedBarber.id} 
-                    onChange={this.handleChange}
-                    native={true}
-                    inputProps={{
-                      name: 'selectedBarber',
-                      id: 'index',
-                    }}>
-                    {this.state.barberList &&
-                      Object.keys(this.state.barberList).map((index) => {
-                        var barberName = this.state.barberList[index];
-                        return <option key={index} value={index}>{barberName}</option>
-                      })
-                    }
-                  </Select>
-                </FormControl>
-                <FormControl className={classes.formControl}>
-                  <InputLabel htmlFor="service">Service</InputLabel>
-                  <Select
-                    value={this.state.selectedService}
-                    onChange={this.handleChange}
-                    native={true}
-                    inputProps={{
-                      name: 'selectedService',
-                      id: 'index',
-                    }}
-                  >
-                  {this.state.barberServices &&
-                    this.state.barberServices.map((service,index) => {
-                      return <option key={index} value={service}>{service}</option>
+                    name: 'selectedBarber',
+                    id: 'index',
+                  }}>
+                  {this.state.barberList &&
+                    Object.keys(this.state.barberList).map((index) => {
+                      var barberName = this.state.barberList[index];
+                      return <option key={index} value={index}>{barberName}</option>
                     })
                   }
-                  </Select>
-                </FormControl>
-                <TextField
-                  id="name"
-                  label="Fullname"
+                </Select>
+              </FormControl>
+              <FormControl className={classes.formControl}>
+                <InputLabel htmlFor="service">Service</InputLabel>
+                <Select
+                  value={this.state.selectedService}
                   onChange={this.handleChange}
-                  className={classes.textField}
-                  value={this.state.clientName}
-                  margin="normal"
-                  name="clientName"
-                />
-                <TextField
-                  id="phone"
-                  label="Phone number"
-                  onChange={this.handleChange}
-                  className={classes.textField}
-                  value={this.state.clientPhone}
-                  margin="normal"
-                  name="clientPhone"
-                />
-                <Button className={classes.button} type="submit">Make reservation</Button>
-              </form>
-            </Grid>
+                  native={true}
+                  inputProps={{
+                    name: 'selectedService',
+                    id: 'index',
+                  }}
+                >
+                {this.state.barberServices &&
+                  this.state.barberServices.map((service,index) => {
+                    return <option key={index} value={service}>{service}</option>
+                  })
+                }
+                </Select>
+              </FormControl>
+              <TextField
+                id="name"
+                label="Fullname"
+                onChange={this.handleChange}
+                className={classes.textField}
+                value={this.state.clientName}
+                margin="normal"
+                name="clientName"
+              />
+              <TextField
+                id="phone"
+                label="Phone number"
+                onChange={this.handleChange}
+                className={classes.textField}
+                value={this.state.clientPhone}
+                margin="normal"
+                name="clientPhone"
+              />
+              <Button className={classes.button} type="submit">Make reservation</Button>
+            </form>
+          </Grid>
+          <Grid item xs={12}>                
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>ReservationID</TableCell>
+                  <TableCell>Barber Name</TableCell>
+                  <TableCell>Client Name</TableCell>
+                  <TableCell numeric>Client Phone</TableCell>
+                  <TableCell>Service</TableCell>
+                  <TableCell>Duration</TableCell>
+                  <TableCell numeric>Slot</TableCell>
+                  <TableCell>Status</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {this.state.reservationList.map(res => {
+                  return (
+                    <TableRow key={res.id}>
+                      <TableCell>{res.id}</TableCell>
+                      <TableCell>{res.barberName}</TableCell>
+                      <TableCell>{res.clientName}</TableCell>
+                      <TableCell numeric>{res.clientPhone}</TableCell>
+                      <TableCell>{res.service}</TableCell>
+                      <TableCell>{res.duration}</TableCell>
+                      <TableCell numeric>{res.slot}</TableCell>
+                      <TableCell>{res.status}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </Grid>
         </Grid>
       </div>
