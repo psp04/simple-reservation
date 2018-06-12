@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -23,6 +24,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
+import { lighten } from '@material-ui/core/styles/colorManipulator';
+import Tooltip from '@material-ui/core/Tooltip';
+import DeleteIcon from '@material-ui/icons/Delete';
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 import firestore from '../server.js';
 
@@ -61,6 +66,78 @@ const styles = theme => ({
     minWidth: 700,
   },
 });
+
+
+const toolbarStyles = theme => ({
+  root: {
+    paddingRight: theme.spacing.unit,
+  },
+  highlight:
+    theme.palette.type === 'light'
+      ? {
+          color: theme.palette.secondary.main,
+          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+        }
+      : {
+          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.secondary.dark,
+        },
+  spacer: {
+    flex: '1 1 100%',
+  },
+  actions: {
+    color: theme.palette.text.secondary,
+  },
+  title: {
+    flex: '0 0 auto',
+  },
+});
+
+let EnhancedTableToolbar = props => {
+  const { numSelected, classes } = props;
+  return (
+    <Toolbar
+      className={classNames(classes.root, {
+        [classes.highlight]: numSelected > 0,
+      })}
+    >
+      <div className={classes.title}>
+        {numSelected > 0 ? (
+          <Typography color="inherit" variant="subheading">
+            {numSelected} selected
+          </Typography>
+        ) : (
+          <Typography variant="title" id="tableTitle">
+            All reservations
+          </Typography>
+        )}
+      </div>
+      <div className={classes.spacer} />
+      <div className={classes.actions}>
+        {numSelected > 0 ? (
+          <Tooltip title="Test">
+            <IconButton aria-label="Test">
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <Tooltip title="Filter list">
+            <IconButton aria-label="Filter list">
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+      </div>
+    </Toolbar>
+  );
+};
+
+EnhancedTableToolbar.propTypes = {
+  classes: PropTypes.object.isRequired,
+  numSelected: PropTypes.number.isRequired,
+};
+
+EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 
 class Main extends React.Component {
   
@@ -327,7 +404,8 @@ class Main extends React.Component {
               <Button className={classes.button} type="submit">Make reservation</Button>
             </form>
           </Grid>
-          <Grid item xs={12}>                
+          <Grid item xs={12}>    
+            <EnhancedTableToolbar numSelected={this.state.selectedReservations.length} />            
             <Table className={classes.table}>
               <TableHead>
                 <TableRow>
