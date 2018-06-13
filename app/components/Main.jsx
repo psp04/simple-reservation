@@ -28,6 +28,7 @@ import { lighten } from '@material-ui/core/styles/colorManipulator';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import firebase from '@firebase/app';
 
 import firestore from '../server.js';
 
@@ -97,63 +98,53 @@ const toolbarStyles = theme => ({
 let EnhancedTableToolbar = props => {
   const { numSelected, classes, selectedRes } = props;
 
-  const handleDelete = () => {
-    console.log(selectedRes);
-    //var clientName = "Ivan";
-    //var resID = "10D4GkyOqQMhsBuvrzb1";
-    
-    var result = selectedRes.map((resID) => {
-      let slot = "";
-      let clientPhone = 0;
+  const handleDelete = () => { 
+    // loop through selectedReservations
+    selectedRes.map((resID) => {
+      // get reservation by ID
       firestore.collection("Reservations").doc(resID).get().then((doc) => {
         if (doc.exists) {
-          console.log(doc.id);
-          firestore.collection("Reservations").doc(doc.id).delete().then(function() {
-            var resID = doc.id;
-            console.log(resID.toString());
-            firestore.collection("Barbers").where("availability." + resID.toString(), "==", 1400).get().then(function (querySnapshot) {
-                if (querySnapshot.size > 0){
-                    querySnapshot.forEach(function (doc) {
-                        console.log(doc.id);
-                        // doc.data() is never undefined for query doc snapshots      
-                        //var barberRef = firestore.collection('Barbers').doc(doc.id);
-                        //var removeReservationID = barberRef.update({
-                        //    "availability.10D4GkyOqQMhsBuvrzb1" : firebase.firestore.FieldValue.delete()
-                       // });                
-                      });
-                } else {
-                    console.log('no documents found');
-                }
-              /*firestore.collection("Clients").where("name", "==", clientPhone).get().then(function (querySnapshot) {
+          var slot = doc.data().slot;
+          var clientPhone = doc.data().clientPhone;
+          var resID = doc.id;
+          var availabilitySlotField = "availability." + resID.toString();
+          // delete reservation by id
+          firestore.collection("Reservations").doc(resID).delete().then(() => {
+            // find the barber by reservation slot and delete it from availability object
+            firestore.collection("Barbers").where(availabilitySlotField, "==", slot).get().then((querySnapshot) => {
+              if (querySnapshot.size > 0){
+                  querySnapshot.forEach((doc) => {
+                      var barberRef = firestore.collection('Barbers').doc(doc.id);
+                      var removeReservationID = barberRef.update({
+                        [availabilitySlotField] : firebase.firestore.FieldValue.delete()
+                      });                
+                    });
+              } else {
+                  console.log('Reservation slot is not found');
+              }
+              // find the client by his phone number and delete his reservation
+              firestore.collection("Clients").where("clientPhone", "==", clientPhone).get().then((querySnapshot) => {
                   if (querySnapshot.size > 0){
-                      querySnapshot.forEach(function (doc) {
-                          // doc.data() is never undefined for query doc snapshots
-                          console.log(resID);
-                          firestore.collection("Clients").doc(doc.id).collection("reservations").doc(resID).delete().then(function(){
+                      querySnapshot.forEach((doc) => {
+                          firestore.collection("Clients").doc(doc.id).collection("reservations").doc(resID).delete().then(() => {
                               console.log("Document successfully deleted!");
-                          }).catch(function(error) {
+                          }).catch((error) => {
                               console.error("Error removing document: ", error);
                           });
                       });
                   } else {
-                      console.log('no documents found');
+                      console.log('Client with number:' + clientPhone + "was not found");
                   }
-              });  */
+              });  
             });
-          }).catch(function(error) {
-              console.error("Error removing document: ", error);
+          }).catch((error) => {
+              console.error("Error removing reservation: ", error);
           });
-        } else {
-          console.log("No such document!");
         }
-      }).catch(function(error) {
-        console.log("Error getting document:", error);
+      }).catch((error) => {
+        console.log("Can't get the reservation:", error);
       });
-
     });
-
-
-
   };
 
   return (
@@ -277,7 +268,7 @@ class Main extends React.Component {
             availability
           }, { merge: true }).then(() => {
             // check if customer already exists in the database
-            firestore.collection("Clients").where("phone", "==", clientPhone).get().then((querySnapshot) => {
+            firestore.collection("Clients").where("clientPhone", "==", clientPhone).get().then((querySnapshot) => {
                 if (querySnapshot.size > 0){
                     querySnapshot.forEach(function (doc) {
                         console.log(resID);
