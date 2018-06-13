@@ -194,7 +194,7 @@ class Main extends React.Component {
     var service = this.state.selectedService;
     var duration = "30min";
     var favourite = true;
-    var slot = this.state.reservationTime.split(':').join('');
+    var slot = this.state.reservationTime
     var status = "waiting";
 
     // add new reservation in the database
@@ -216,7 +216,7 @@ class Main extends React.Component {
             availability
           }, { merge: true }).then(() => {
             // check if customer already exists in the database
-            firestore.collection("Clients").where("name", "==", clientName).get().then((querySnapshot) => {
+            firestore.collection("Clients").where("name", "==", clientPhone).get().then((querySnapshot) => {
                 if (querySnapshot.size > 0){
                     querySnapshot.forEach(function (doc) {
                         console.log(resID);
