@@ -32,6 +32,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import firestore from '../server.js';
 
 
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -94,7 +95,67 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes } = props;
+  const { numSelected, classes, selectedRes } = props;
+
+  const handleDelete = () => {
+    console.log(selectedRes);
+    //var clientName = "Ivan";
+    //var resID = "10D4GkyOqQMhsBuvrzb1";
+    
+    var result = selectedRes.map((resID) => {
+      let slot = "";
+      let clientPhone = 0;
+      firestore.collection("Reservations").doc(resID).get().then((doc) => {
+        if (doc.exists) {
+          console.log(doc.id);
+          firestore.collection("Reservations").doc(doc.id).delete().then(function() {
+            var resID = doc.id;
+            console.log(resID.toString());
+            firestore.collection("Barbers").where("availability." + resID.toString(), "==", 1400).get().then(function (querySnapshot) {
+                if (querySnapshot.size > 0){
+                    querySnapshot.forEach(function (doc) {
+                        console.log(doc.id);
+                        // doc.data() is never undefined for query doc snapshots      
+                        //var barberRef = firestore.collection('Barbers').doc(doc.id);
+                        //var removeReservationID = barberRef.update({
+                        //    "availability.10D4GkyOqQMhsBuvrzb1" : firebase.firestore.FieldValue.delete()
+                       // });                
+                      });
+                } else {
+                    console.log('no documents found');
+                }
+              /*firestore.collection("Clients").where("name", "==", clientPhone).get().then(function (querySnapshot) {
+                  if (querySnapshot.size > 0){
+                      querySnapshot.forEach(function (doc) {
+                          // doc.data() is never undefined for query doc snapshots
+                          console.log(resID);
+                          firestore.collection("Clients").doc(doc.id).collection("reservations").doc(resID).delete().then(function(){
+                              console.log("Document successfully deleted!");
+                          }).catch(function(error) {
+                              console.error("Error removing document: ", error);
+                          });
+                      });
+                  } else {
+                      console.log('no documents found');
+                  }
+              });  */
+            });
+          }).catch(function(error) {
+              console.error("Error removing document: ", error);
+          });
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document:", error);
+      });
+
+    });
+
+
+
+  };
+
   return (
     <Toolbar
       className={classNames(classes.root, {
@@ -117,7 +178,7 @@ let EnhancedTableToolbar = props => {
         {numSelected > 0 ? (
           <Tooltip title="Test">
             <IconButton aria-label="Test">
-              <DeleteIcon />
+              <DeleteIcon onClick={handleDelete}/>
             </IconButton>
           </Tooltip>
         ) : (
@@ -216,7 +277,7 @@ class Main extends React.Component {
             availability
           }, { merge: true }).then(() => {
             // check if customer already exists in the database
-            firestore.collection("Clients").where("name", "==", clientPhone).get().then((querySnapshot) => {
+            firestore.collection("Clients").where("phone", "==", clientPhone).get().then((querySnapshot) => {
                 if (querySnapshot.size > 0){
                     querySnapshot.forEach(function (doc) {
                         console.log(resID);
@@ -405,7 +466,7 @@ class Main extends React.Component {
             </form>
           </Grid>
           <Grid item xs={12}>    
-            <EnhancedTableToolbar numSelected={this.state.selectedReservations.length} />            
+            <EnhancedTableToolbar numSelected={this.state.selectedReservations.length} selectedRes={this.state.selectedReservations}/>            
             <Table className={classes.table}>
               <TableHead>
                 <TableRow>
