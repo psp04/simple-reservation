@@ -26,6 +26,7 @@ function convertTime(slot) {
 module.exports = function (snap, context) {
   var res = snap.data();
 
+  // Send message to client
   client.messages
     .create({
       body: `Your reservation with ${res.barberName} has been scheduled for ${convertTime(res.slot)}. Reply with YES to confirm or NO to cancel at any time`,
