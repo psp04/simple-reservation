@@ -2,11 +2,11 @@ import React from 'react';
 import { render } from 'react-dom';
 import './server.js';
 
-import Main from './components/Main';
+import ReservationPage from './components/ReservationPage';
 
 //Main App
 const App = () => (
-  <Main />
+  <ReservationPage />
 );
 
 render(<App />, document.getElementById('app'));
