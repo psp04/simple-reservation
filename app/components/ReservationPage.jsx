@@ -91,8 +91,9 @@ class ReservationPage extends React.Component {
 	}
 
   handleSubmit(event){
-    event.preventDefault();    
-
+		event.preventDefault();    
+		
+		var resDate = this.state.reservationDate.replace(/-/g, "");
     var barberName = this.state.selectedBarber.name;
     var clientName = this.state.clientName;
     var clientPhone = this.state.clientPhone;
@@ -110,16 +111,18 @@ class ReservationPage extends React.Component {
         service: service,
         duration: duration,
         favourite: favourite,
-        slot: slot,
+				slot: slot,
+				date: resDate,
         status: status
     }).then((doc) => {
-        var resID = doc.id;
-        var availability = {};
+				var resID = doc.id;
+				var availability = {};
         availability[resID] = slot;
-        // add reserved slot in barber's availability object
-        firestore.collection("Barbers").doc(this.state.selectedBarber.id).set({
-            availability
-          }, { merge: true }).then(() => {
+				var newResDate = firestore.collection("Barbers").doc(this.state.selectedBarber.id).collection("Availability").doc(resDate.toString());
+				// add reserved slot in barber's availability date document
+        newResDate.set({
+					availability
+				}, { merge: true }).then(() => {
             // check if customer already exists in the database
             firestore.collection("Clients").where("clientPhone", "==", clientPhone).get().then((querySnapshot) => {
                 if (querySnapshot.size > 0){
