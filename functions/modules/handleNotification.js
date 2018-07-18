@@ -30,7 +30,7 @@ module.exports = function (snap, context) {
   client.messages
     .create({
       body: `Your reservation with ${res.barberName} has been scheduled for ${convertTime(res.slot)}. Reply with YES to confirm or NO to cancel at any time`,
-      to: CONFIG.testNumber, // Text this number
+      to: res.clientPhone, // Text this number
       from: CONFIG.twilioNumber // From a valid Twilio number
     })
     .then(message => console.log(message.sid));
