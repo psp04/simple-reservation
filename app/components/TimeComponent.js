@@ -18,7 +18,7 @@ class TimeComponent extends React.Component {
                 <h2>Time Component</h2>
                 <Slider {...settings}>
                     {arrayList.map((element) => (
-                        <div className="pill" key={element}>{element}</div>
+                        <div key={element}>{element}</div>
                     ))}
                 </Slider> 
             </div> 
