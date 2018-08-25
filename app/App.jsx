@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import ReservationPage from './components/ReservationPage';
 import AdminDashboard from './components/AdminDashboard';
 import ServicePicker from './components/ServicePicker';
+import SimpleSlider from './components/SimpleSlider';
 import './server.js';
 
 
@@ -14,6 +15,7 @@ const App = () => (
       <Route exact path="/" component={ReservationPage} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/services" component={ServicePicker} />
+      <Route path="/slick-slide" component={SimpleSlider} />
     </div>
   </Router>
 );
