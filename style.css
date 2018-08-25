@@ -1,0 +1,9 @@
+.pill{
+    color: white;
+    background-color: #364488;
+    padding: 10px;
+    border-radius: 100px;
+    text-align: center;
+
+    margin-right: 100px;
+}
