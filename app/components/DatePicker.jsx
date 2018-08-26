@@ -1,3 +1,9 @@
+/* ToDo
+*	add custom navigation arrows
+*
+
+*/
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
@@ -57,6 +63,7 @@ class DatePicker extends React.Component {
 		};
 		this.onDateChange = this.onDateChange.bind(this);
 		this.onFocusChange = this.onFocusChange.bind(this);
+		this.onClose = this.onClose.bind(this);
 	}
 
 	onDateChange(date) {
@@ -65,6 +72,10 @@ class DatePicker extends React.Component {
 
 	onFocusChange(focused) {
 		this.setState({ focused });
+	}
+
+	onClose(event){
+		console.log("OnClose event was fired");
 	}
 
 	render() {
@@ -82,6 +93,15 @@ class DatePicker extends React.Component {
 							focused={this.state.focused} // PropTypes.bool
 							onFocusChange={this.onFocusChange} // PropTypes.func.isRequired
 							id="datepicker" // PropTypes.string.isRequired,
+							showDefaultInputIcon
+							noBorder
+							orientation="vertical"
+							autoFocus
+							onClose={this.onClose}
+							verticalHeight={500}
+							openDirection="down"
+							onOutsideClick
+							
 						/>
 					</Grid>
 				</Grid>
