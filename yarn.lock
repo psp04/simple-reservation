@@ -1361,6 +1361,12 @@ capture-stack-trace@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/capture-stack-trace/-/capture-stack-trace-1.0.0.tgz#4a6fa07399c26bba47f0b2496b4d0fb408c5550d"
 
+carousel@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/carousel/-/carousel-0.0.3.tgz#f83ca5583165bb98f174c01e67a1b54b902cc97f"
+  dependencies:
+    domready "~0.2.12"
+
 caseless@~0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
@@ -1994,6 +2000,10 @@ domhandler@^2.3.0:
   resolved "https://registry.yarnpkg.com/domhandler/-/domhandler-2.4.2.tgz#8805097e933d65e85546f726d60f5eb88b44f803"
   dependencies:
     domelementtype "1"
+
+domready@~0.2.12:
+  version "0.2.13"
+  resolved "https://registry.yarnpkg.com/domready/-/domready-0.2.13.tgz#5ec8340b5ee5f76ad72fd32007cfb5d38a2cd361"
 
 domutils@1.5.1:
   version "1.5.1"
@@ -4922,6 +4932,10 @@ slash@^1.0.0:
 slick-carousel@^1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/slick-carousel/-/slick-carousel-1.8.1.tgz#a4bfb29014887bb66ce528b90bd0cda262cc8f8d"
+
+slick@^1.12.2:
+  version "1.12.2"
+  resolved "https://registry.yarnpkg.com/slick/-/slick-1.12.2.tgz#bd048ddb74de7d1ca6915faa4a57570b3550c2d7"
 
 snakeize@^0.1.0:
   version "0.1.0"

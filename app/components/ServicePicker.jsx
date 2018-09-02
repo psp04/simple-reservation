@@ -1,42 +1,49 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import SimpleSlider from './SimpleSlider';
-
-const styles = theme => ({
-    root: {
-        flexGrow: 1,
-    }
-});
+import Slider from "react-slick";
 
 class ServicePicker extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-
+            selectedService: undefined
         }
     }
 
     render() {
-        const { classes } = this.props;
-        return (
-            <div className={classes.root}>
-                <Grid container spacing={24}>
-                    <h1>Hello from ServicePicker component</h1>
-                    <SimpleSlider>Test</SimpleSlider>
-                </Grid>
+        const settings = {
+            infinite: false,
+            slidesToShow: 3,
+            swipeToSlide: true
+        };
 
+        return (
+            <div>
+                <h2>Hello from ServicePicker component!</h2>
+                <Slider {...settings}>
+                    <div>
+                        <img src="https://i.ytimg.com/vi/BgIgKcqPd4k/maxresdefault.jpg" class="kitten" />
+                    </div>
+                    <div>
+                        <img src="https://kittenrescue.org/wp-content/uploads/2017/03/KittenRescue_KittenCareHandbook.jpg" class="kitten" />
+                    </div>
+                    <div>
+                        <img src="http://cdn.earthporm.com/wp-content/uploads/2015/07/sleeping-kitties-1__6051.jpg" class="kitten" />
+                    </div>
+                    <div>
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRx4XyTH9hgoLmejDZr78piNVmL8v1zPumShStyGlrjYoh4HrYL" class="kitten" />
+                    </div>
+                    <div>
+                        <img src="https://www.yourcat.co.uk/images/legacy/stories/introducing_kittens_main.jpg" class="kitten" />
+                    </div>
+                    <div>
+                        <img src="https://snowyswan.com/wp-content/uploads/2016/02/free-kittens-in-the-box.jpg" class="kitten" />
+                    </div>
+                </Slider>
             </div>
         );
     }
 }
 
-ServicePicker.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(ServicePicker);
+export default ServicePicker;
