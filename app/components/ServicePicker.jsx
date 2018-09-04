@@ -23,22 +23,22 @@ class ServicePicker extends React.Component {
                 <h2>Hello from ServicePicker component!</h2>
                 <Slider {...settings}>
                     <div>
-                        <img src="https://i.ytimg.com/vi/BgIgKcqPd4k/maxresdefault.jpg" class="kitten" />
+                        <img src="assets/services/buzz.svg" />
                     </div>
                     <div>
-                        <img src="https://kittenrescue.org/wp-content/uploads/2017/03/KittenRescue_KittenCareHandbook.jpg" class="kitten" />
+                        <img src="https://kittenrescue.org/wp-content/uploads/2017/03/KittenRescue_KittenCareHandbook.jpg" />
                     </div>
                     <div>
-                        <img src="http://cdn.earthporm.com/wp-content/uploads/2015/07/sleeping-kitties-1__6051.jpg" class="kitten" />
+                        <img src="http://cdn.earthporm.com/wp-content/uploads/2015/07/sleeping-kitties-1__6051.jpg" />
                     </div>
                     <div>
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRx4XyTH9hgoLmejDZr78piNVmL8v1zPumShStyGlrjYoh4HrYL" class="kitten" />
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRx4XyTH9hgoLmejDZr78piNVmL8v1zPumShStyGlrjYoh4HrYL"  />
                     </div>
                     <div>
-                        <img src="https://www.yourcat.co.uk/images/legacy/stories/introducing_kittens_main.jpg" class="kitten" />
+                        <img src="https://www.yourcat.co.uk/images/legacy/stories/introducing_kittens_main.jpg"/>
                     </div>
                     <div>
-                        <img src="https://snowyswan.com/wp-content/uploads/2016/02/free-kittens-in-the-box.jpg" class="kitten" />
+                        <img src="https://snowyswan.com/wp-content/uploads/2016/02/free-kittens-in-the-box.jpg"  />
                     </div>
                 </Slider>
             </div>
