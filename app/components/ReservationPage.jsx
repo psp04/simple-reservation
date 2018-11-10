@@ -4,6 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import TimeComponent from "./TimeComponent";
+import ServicePicker from "./ServicePicker";
+import BarbersDropdownList from "./BarbersDropdownList";
 
 const styles = theme => ({
   root: {
@@ -27,6 +29,12 @@ const ReservationPage = (props) => {
         <Grid item xs>
         </Grid>
         <Grid item xs={4}>
+          <Paper className={classes.paper}>
+            <ServicePicker />
+          </Paper>
+          <Paper className={classes.paper}>
+            <BarbersDropdownList />
+          </Paper>
           <Paper className={classes.paper}>
             <TimeComponent />
           </Paper>
