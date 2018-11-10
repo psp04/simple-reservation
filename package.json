@@ -23,12 +23,14 @@
     "firebase-admin": "^5.12.1",
     "moment": ">=1.6.0",
     "parcel-bundler": "^1.8.1",
-    "react": "^0.14 || ^15.5.4 || ^16.1.1",
+    "react": "^0.14.0 || ^15.0.1 || ^16.0.0",
+    "react-router-dom": "^4.3.1",
+    "react-slick": "^0.23.2",
+    "slick-carousel": "^1.8.1",
     "react-dates": "^17.2.0",
     "react-dom": "^0.14 || ^15.5.4 || ^16.1.1",
     "react-moment-proptypes": "^1.6.0",
-    "react-outside-click-handler": "^1.2.2",
-    "react-router-dom": "^4.3.1"
+    "react-outside-click-handler": "^1.2.2"
   },
   "devDependencies": {}
 }

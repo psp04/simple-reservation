@@ -1,0 +1,19 @@
+.pill{
+    color: white;
+    background-color: #364488;
+    padding: 20px;
+    width: 60%;
+    border-radius: 100px;
+    text-align: center;
+
+    margin: auto;
+}
+
+.pill-active{
+    color: white;
+    background-color: #D62964;
+    padding: 20px;
+    width: 60%;
+    border-radius: 100px;
+    text-align: center;
+}
