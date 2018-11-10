@@ -5,6 +5,7 @@ import ReservationPage from './components/ReservationPage';
 import AdminDashboard from './components/AdminDashboard';
 import DatePicker from './components/DatePicker';
 import './server.js';
+import './App.css';
 
 
 //Main App
