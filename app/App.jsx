@@ -4,7 +4,11 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import ReservationPage from './components/ReservationPage';
 import AdminDashboard from './components/AdminDashboard';
 import ServicePicker from './components/ServicePicker';
+import TimeComponent from './components/TimeComponent';
+import DatePicker from './components/DatePicker';
+
 import './server.js';
+import './App.css';
 
 
 //Main App
@@ -14,6 +18,8 @@ const App = () => (
       <Route exact path="/" component={ReservationPage} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/services" component={ServicePicker} />
+      <Route path="/time" component={TimeComponent} />
+      <Route path="/datepicker" component={DatePicker} />
     </div>
   </Router>
 );
