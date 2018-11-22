@@ -87,6 +87,7 @@ class ServicePicker extends React.Component {
     console.log(event.target.id);
     const { id } = event.target;
     this.setState({ selectedServiceName: id });
+    this.props.getSelectedService(id);
   }
 
   render() {
