@@ -9,6 +9,7 @@ import DatePicker from './components/DatePicker';
 
 import './server.js';
 import './App.css';
+import BarbersDropdownList from './components/BarbersDropdownList';
 
 
 //Main App
@@ -20,6 +21,7 @@ const App = () => (
       <Route path="/services" component={ServicePicker} />
       <Route path="/time" component={TimeComponent} />
       <Route path="/datepicker" component={DatePicker} />
+      <Route path="/barbers" component={BarbersDropdownList} />
     </div>
   </Router>
 );
