@@ -2,15 +2,15 @@
   width: 50px !important;
   padding: 0 50px;
 }
-.pill {
-  color: white;
-  background-color: #364488;
-  padding: 20px;
-  width: 60%;
-  border-radius: 100px;
-  text-align: center;
 
-  margin: auto;
+.pill{
+    color: white;
+    background-color: #364488;
+    padding: 20px;
+    width: 60%;
+    border-radius: 100px;
+    text-align: center;
+    margin: auto;
 }
 
 .pill-active {
