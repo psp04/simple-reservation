@@ -1,7 +1,8 @@
-/*.slick-slide {
+.slick-slide {
   width: 50px !important;
   padding: 0 50px;
-}*/
+}
+
 .pill{
     color: white;
     background-color: #364488;
@@ -9,15 +10,31 @@
     width: 60%;
     border-radius: 100px;
     text-align: center;
-
     margin: auto;
 }
 
-.pill-active{
-    color: white;
-    background-color: #D62964;
-    padding: 20px;
-    width: 60%;
-    border-radius: 100px;
-    text-align: center;
+.pill-active {
+  color: white;
+  background-color: #d62964;
+  padding: 20px;
+  width: 60%;
+  border-radius: 100px;
+  text-align: center;
 }
+
+.DateInput_fangShape,
+.DateInput_fangStroke {
+  display: none;
+}
+
+.DateInput_input__focused {
+  border-bottom: 2px solid transparent !important;
+}
+
+.SingleDatePickerInput, .DateInput, .DateInput_input {
+  background-color: transparent !important;
+  color: #fff !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+
