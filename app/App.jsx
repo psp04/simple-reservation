@@ -6,11 +6,9 @@ import AdminDashboard from './components/AdminDashboard';
 import ServicePicker from './components/ServicePicker';
 import TimeComponent from './components/TimeComponent';
 import DatePicker from './components/DatePicker';
-
+import BarbersDropdownList from './components/BarbersDropdownList';
 import './server.js';
 import './App.css';
-import BarbersDropdownList from './components/BarbersDropdownList';
-
 
 //Main App
 const App = () => (
