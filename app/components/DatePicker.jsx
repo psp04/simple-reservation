@@ -1,10 +1,11 @@
 /* ToDo
- *	add custom navigation arrows
- * change the font and color for the dates and headers
- * add styles to the presets buttons
- * show date at the bottom of the text
+ * add custom navigation arrows
+ * change the font and color for the dates and headers in the calendar
  * highlight the date in the calendar
- *
+ * fix the issue with selecting another date in the calendar (not today and tomorrow), licking on tomorrow or todat and   clicking back on the "Other" button
+ * fix the issue with shifting of the elements(buttons) while selecting one of them
+ * show calendar as a modal in the center of reservation page container
+ * add background overlay and close button when calendar is opened
  */
 
 import React from "react";
@@ -26,16 +27,42 @@ const styles = theme => ({
   root: {
     flexGrow: 1
   },
+  middlePresetButton: {
+    borderRadius: 20,
+    width: 100,
+    display: "inline-block",
+    //marginLeft: "2.3em",
+    padding: "7px 10px"
+  },
   presetButton: {
     borderRadius: 20,
     width: 100,
     display: "inline-block",
-    marginLeft: "2em",
-    padding: 20
+    marginLeft: "2.3em",
+    padding: "7px 10px"
+  },
+  presetButtonLeft: {
+    borderRadius: 20,
+    width: 100,
+    display: "inline-block",
+    //marginLeft: "2.3em",
+    position: "relative",
+    left: "-2em",
+    padding: "7px 10px 7px 30px"
+  },
+  presetButtonRight: {
+    borderRadius: 20,
+    width: 100,
+    display: "inline-block",
+    position: "relative",
+    right: "-3em",
+    //marginLeft: "2.3em",
+    padding: "7px 30px 7px 10px"
   },
   selectedPresetButton: {
     backgroundColor: "#d62964",
-    color: "#fff"
+    color: "#fff",
+    textAlign: "center"
   }
 });
 
@@ -133,10 +160,29 @@ class DatePicker extends React.Component {
       <div className={classes.root}>
         <Grid container spacing={24} direction="row">
           <Grid item xs={12}>
-            {presets.map(({ text, date }) => {
+            {presets.map(({ text, date }, index) => {
               var formattedDate = date.format("MMM D").toString();
 
-              if (date === selectedDate) {
+              if (date === selectedDate && index === 0) {
+                return (
+                  <div
+                    className={
+                      date === selectedDate
+                        ? [
+                            classes.selectedPresetButton,
+                            classes.presetButtonLeft
+                          ].join(" ")
+                        : classes.presetButtonLeft
+                    }
+                  >
+                    <span onClick={() => this.onDateChange(date)}>{text}</span>
+                    <br />
+                    <span>
+                      <b>{formattedDate}</b>
+                    </span>
+                  </div>
+                )
+              } else if (date === selectedDate && index !== 0){
                 return (
                   <div
                     className={
@@ -155,7 +201,8 @@ class DatePicker extends React.Component {
                     </span>
                   </div>
                 );
-              } else {
+              }       
+              else {
                 return (
                   <div
                     className={classes.presetButton}
@@ -172,10 +219,10 @@ class DatePicker extends React.Component {
 								<div
 									className={
 										selectedDate  === calendarDate.format("MMM D").toString()
-											? [classes.selectedPresetButton, classes.presetButton].join(
+											? [classes.selectedPresetButton, classes.presetButtonRight].join(
 													" "
 												)
-											: classes.presetButton
+											: classes.presetButtonRight
 									}
 								>
 									<span>Other</span>
