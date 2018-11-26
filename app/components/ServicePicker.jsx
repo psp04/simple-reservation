@@ -1,14 +1,6 @@
-/* Todo
- * keep selectedService type as a state in the ReservationPage component
- * import and render the ServicePicker component inside the ReservationPage component
- * refactor the barbers dropdown component
- * get the barbers from firebase database to populate the dropdown list
- * connect servicepicker component and barber component to update dropdown selection options depending on the selectedService type
- */
-
 /*Notes
  * research possibility to get all images from firestore storage
- */
+*/
 
 import React from "react";
 import ReactDOM from "react-dom";
@@ -33,6 +25,12 @@ const styles = {
 
   serviceImage: {
     width: "50px"
+  },
+
+  serviceName: {
+    "font-family":"Roboto, sans-serif",
+    "font-weight":"500",
+    "font-size":"13px"
   }
 };
 
@@ -131,10 +129,11 @@ class ServicePicker extends React.Component {
                   alt={service.name}
                 />
                 <span
+                  className={classes.serviceName}
                   style={
                     selectedServiceName === service.name
                       ? { color: "#D62964" }
-                      : { color: "#979797" }
+                      : { color: "#BCBCBC" }
                   }
                 >
                   {service.name}
