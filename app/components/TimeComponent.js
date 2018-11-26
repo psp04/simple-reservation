@@ -1,13 +1,11 @@
 import React from "react";
 import Slider from "react-slick";
 
-
 const arrayList = [500, 530, 600, 700, 800, 900]; 
 
 const settings = {
-  //className: "center",
+  className: "center",
   infinite: false,
-  //centerPadding: "2px",
   slidesToShow: 3,
   swipeToSlide: true
 };
@@ -22,6 +20,7 @@ class TimeComponent extends React.Component {
   }
 
   handleSelected(event){
+    event.preventDefault();
     this.setState({[event.target.name]: event.target.id }); 
 
     document.querySelectorAll(".pill").forEach(element => {
@@ -31,13 +30,11 @@ class TimeComponent extends React.Component {
         document.getElementById(element.id).classList.remove("pill-active");
       }      
     });
-    
   }
 
   render() {
     return (
       <div>
-        <h2>Time Component</h2>
         <Slider {...settings}>
           {arrayList.map(element => (
             <div key={element}>
