@@ -3,11 +3,20 @@
   padding: 0 50px;
 }
 
+.slick-list {
+  width: 100%;
+}
+
+.slick-track {
+  width: 2000px !important;
+}
+
 .pill{
     color: white;
     background-color: #364488;
     padding: 20px;
-    width: 60%;
+    width: 100px;
+    border:none;
     border-radius: 100px;
     text-align: center;
     margin: auto;
@@ -17,9 +26,14 @@
   color: white;
   background-color: #d62964;
   padding: 20px;
-  width: 60%;
+  width: 100px;
+  border:none;
   border-radius: 100px;
   text-align: center;
+}
+
+.DateInput {
+  width: 100% !important;
 }
 
 .DateInput_fangShape,
@@ -36,5 +50,8 @@
   color: #fff !important;
   font-size: 14px !important;
   font-weight: 700 !important;
+  padding: 0 !important;
+  border-bottom: 0 !important;
+  text-align: center;
 }
 
