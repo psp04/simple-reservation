@@ -1,10 +1,19 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import firebase from '@firebase/app';
-import firestore from '../server.js';
+import React from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import firebase from "@firebase/app";
+import firestore from "../server.js";
+
+const styles = theme => ({
+  selectList: {
+    marginLeft: "25%",
+    marginRight: "25%",
+    width: "50%"
+  }
+});
 
 class BarbersDropdownList extends React.Component {
   constructor(props) {
@@ -14,53 +23,55 @@ class BarbersDropdownList extends React.Component {
       barberList: []
     };
     this.handleChange = this.handleChange.bind(this);
+    this.getBarbersList = this.getBarbersList.bind(this);
   }
 
-  componentDidMount(){
-    // get all barbers
-    var service = "Short Cut";
+  componentDidUpdate(prevProps) {
+    if (this.props.selectedServiceName !== prevProps.selectedServiceName) {
+      this.getBarbersList(this.props.selectedServiceName);
+    }
+  }
+
+  getBarbersList(service) {
     var barbers = [];
     var barber = {};
-    firestore.collection("Barbers").get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) =>  {     
-        barber = Object.assign({}, doc.data());
-        barber.id = doc.id;
-        if (barber.services.includes(service)){
-          barbers.push(barber);
-        }
-        
+    firestore
+      .collection("Barbers")
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          barber = Object.assign({}, doc.data());
+          barber.id = doc.id;
+          if (barber.services.includes(service)) {
+            barbers.push(barber);
+          }
+        });
+        this.setState({ barberList: barbers });
       });
-      this.setState({ barberList: barbers });
-		});
   }
 
   handleChange(event) {
-    const {name,value} = event.target;
-    this.setState({[name] : value});
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
   }
 
-
-  render (){
+  render() {
     const { selectedBarber, barberList } = this.state;
-    console.log(barberList);
+    const { classes } = this.props;
+
     return (
-      <div>
-        <FormControl>
-          <Select
-            value={selectedBarber}
-            onChange={this.handleChange}
-            displayEmpty
-            name="selectedBarber"
-          >
-            {
-              barberList.map((barber) => {
-                return <MenuItem key={barber.id}>{barber.name}</MenuItem>
-              })
-            }
-          </Select>
-        </FormControl>
-      </div>
-    )
+      <Select
+        value={selectedBarber}
+        onChange={this.handleChange}
+        displayEmpty
+        name="selectedBarber"
+        className={classes.selectList}
+      >
+        {barberList.map(barber => {
+          return <MenuItem key={barber.id}>{barber.name}</MenuItem>;
+        })}
+      </Select>
+    );
   }
 }
 
@@ -69,4 +80,4 @@ BarbersDropdownList.propTypes = {
   value: PropTypes.string.isRequired
 };
 
-export default BarbersDropdownList
+export default withStyles(styles)(BarbersDropdownList);
