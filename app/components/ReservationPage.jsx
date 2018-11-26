@@ -1,3 +1,14 @@
+/* Todo
+* Error validation and displaying error inside FormHelperText
+* add continue button with submit type
+* get current state values from each component to use in handleSubmit function
+* the default icon for ServicePicker should be in the middle of the slick slider
+* add default state "-" for dropdown list with blue highlight
+* highlight the today date as default state for datePicker
+* add background to the reservationPage
+* use values for the firebase for the TimeComponent
+*/
+
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
@@ -6,16 +17,32 @@ import Grid from "@material-ui/core/Grid";
 import TimeComponent from "./TimeComponent";
 import ServicePicker from "./ServicePicker";
 import BarbersDropdownList from "./BarbersDropdownList";
+import DatePicker from "./DatePicker";
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 const styles = theme => ({
   root: {
     flexGrow: 1
   },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: "center",
-    color: theme.palette.text.secondary
-  }
+  form: {
+    overflow: "hidden",
+    backgroundColor: "#99ffcc",
+    height: "660px",
+    width: "375px"
+  },
+  formLabel: {
+    color: "#364488",
+    fontSize: "13px",
+    fontFamily: "Roboto",
+    fontStyle: "italic",    
+    margin:"25px 0",
+    textAlign: "center"
+  },
+  formControl: {
+    width:"100%"
+  },
 });
 
 class ReservationPage extends React.Component {
@@ -37,18 +64,27 @@ class ReservationPage extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Grid container spacing={24}>
+        <Grid container>
           <Grid item xs />
-          <Grid item xs={4}>
-            <Paper className={classes.paper}>
-              <ServicePicker getSelectedService={this.getSelectedService} />
-            </Paper>
-            <Paper className={classes.paper}>
-              <BarbersDropdownList selectedServiceName={selectedServiceName}/>
-            </Paper>
-            <Paper className={classes.paper}>
-              <TimeComponent />
-            </Paper>
+          <Grid item xs={3} className={classes.form}>
+            <form>
+              <FormControl className={classes.formControl}>
+                <FormLabel className={classes.formLabel}>Tap to pick a day</FormLabel>
+                <DatePicker />
+              </FormControl>
+              <FormControl className={classes.formControl}>
+                <FormLabel className={classes.formLabel}>What service would you like</FormLabel>
+                <ServicePicker getSelectedService={this.getSelectedService} />          
+              </FormControl>
+              <FormControl className={classes.formControl}>
+                <FormLabel className={classes.formLabel}>Choose your stylist</FormLabel>
+                <BarbersDropdownList selectedServiceName={selectedServiceName}/>              
+              </FormControl>
+              <FormControl className={classes.formControl}>
+                <FormLabel className={classes.formLabel}>Set a time</FormLabel>
+                <TimeComponent />              
+              </FormControl>
+            </form>
           </Grid>
           <Grid item xs />
         </Grid>
