@@ -55,3 +55,27 @@
   text-align: center;
 }
 
+.CalendarDay__default {
+  color: #364488 !important;  
+  border: 1px solid transparent !important;
+}
+
+.CalendarDay__blocked_out_of_range {
+  color: #cacccd !important;
+  border: 1px solid transparent !important; 
+}
+
+.SingleDatePicker_picker {
+  font-family: Roboto;
+} 
+
+.DayPicker_weekHeader_li {
+  color: #364488;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.CalendarMonth_caption {
+  color: #364488 !important;
+  font-size: 16px !important;
+}
