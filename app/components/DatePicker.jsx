@@ -238,16 +238,12 @@ class DatePicker extends React.Component {
 											enableOutsideDays
 											readOnly={true}
 											autoFocus={false}
-											//onClose={this.onClose}
 											verticalHeight={500}
 											openDirection="down"
 											placeholder="Other"
 											keepOpenOnDateSelect={false}
 											keepFocusOnInput={false}
-											//onClick={this.handleClick}
-											//onOutsideClick={this.onClearFocus}
-											withPortal={false}
-											withFullScreenPortal={false}
+											withPortal
 											displayFormat="MMM D"
 										/>
 									</OutsideClickHandler>
