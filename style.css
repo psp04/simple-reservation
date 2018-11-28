@@ -79,3 +79,9 @@
   color: #364488 !important;
   font-size: 16px !important;
 }
+
+.CalendarDay__selected {
+  background: #d62964 !important;
+  border-radius: 20px;
+  color: #fff !important;
+}
