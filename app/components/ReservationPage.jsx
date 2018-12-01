@@ -21,6 +21,7 @@ import DatePicker from "./DatePicker";
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   root: {
@@ -30,7 +31,8 @@ const styles = theme => ({
     overflow: "hidden",
     backgroundColor: "#99ffcc",
     height: "660px",
-    width: "375px"
+    width: "375px",
+    position: "relative"
   },
   formLabel: {
     color: "#364488",
@@ -41,8 +43,17 @@ const styles = theme => ({
     textAlign: "center"
   },
   formControl: {
-    width:"100%"
+    width:" 100%"
   },
+  continueButton: {
+    backgroundColor: "#364488",
+    borderRadius: "0px",
+    position: "absolute",
+    left: 0,
+    bottom: 0,
+    width: "100%",
+    padding: "20px 0"
+  }
 });
 
 class ReservationPage extends React.Component {
@@ -84,6 +95,9 @@ class ReservationPage extends React.Component {
                 <FormLabel className={classes.formLabel}>Set a time</FormLabel>
                 <TimeComponent />              
               </FormControl>
+              <Button variant="contained" color="primary" className={classes.continueButton}>
+                continue
+              </Button>
             </form>
           </Grid>
           <Grid item xs />
