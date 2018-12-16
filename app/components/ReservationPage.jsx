@@ -95,7 +95,7 @@ class ReservationPage extends React.Component {
                 <FormLabel className={classes.formLabel}>Set a time</FormLabel>
                 <TimeComponent />              
               </FormControl>
-              <Button variant="contained" color="primary" className={classes.continueButton}>
+              <Button variant="contained" color="primary" type="submit" className={classes.continueButton}>
                 continue
               </Button>
             </form>
