@@ -27,42 +27,38 @@ const styles = theme => ({
   root: {
     flexGrow: 1
   },
-  middlePresetButton: {
-    borderRadius: 20,
-    width: 100,
-    display: "inline-block",
-    //marginLeft: "2.3em",
-    padding: "7px 10px"
-  },
   presetButton: {
     borderRadius: 20,
     width: 100,
     display: "inline-block",
-    marginLeft: "2.3em",
-    padding: "7px 10px"
+    padding: "7px 15px",
+    textAlign: "center",
+    fontSize: "18px",
+    fontWeight: "700",
+    color: "rgb(188, 188, 188)"
   },
   presetButtonLeft: {
     borderRadius: 20,
     width: 100,
     display: "inline-block",
-    //marginLeft: "2.3em",
     position: "relative",
-    left: "-2em",
-    padding: "7px 10px 7px 30px"
+    left: "-1em",
+    padding: "7px 0px 7px 50px"
   },
   presetButtonRight: {
     borderRadius: 20,
     width: 100,
     display: "inline-block",
     position: "relative",
-    right: "-3em",
-    //marginLeft: "2.3em",
-    padding: "7px 30px 7px 10px"
+    right: "-1em",
+    padding: "7px 50px 6px 0px"
   },
   selectedPresetButton: {
     backgroundColor: "#d62964",
     color: "#fff",
-    textAlign: "center"
+    textAlign: "center",
+    fontSize: "16px",
+    fontWeight: "500"
   }
 });
 
@@ -159,13 +155,15 @@ class DatePicker extends React.Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={24} direction="row">
-          <Grid item xs={12}>
+          <Grid container xs={12}>
             {presets.map(({ text, date }, index) => {
               var formattedDate = date.format("MMM D").toString();
 
               if (date === selectedDate && index === 0) {
                 return (
-                  <div
+                  <Grid 
+                    item 
+                    xs={4}
                     className={
                       date === selectedDate
                         ? [
@@ -180,11 +178,13 @@ class DatePicker extends React.Component {
                     <span>
                       <b>{formattedDate}</b>
                     </span>
-                  </div>
+                  </Grid>
                 )
               } else if (date === selectedDate && index !== 0){
                 return (
-                  <div
+                  <Grid 
+                    item 
+                    xs={4}
                     className={
                       date === selectedDate
                         ? [
@@ -199,24 +199,28 @@ class DatePicker extends React.Component {
                     <span>
                       <b>{formattedDate}</b>
                     </span>
-                  </div>
+                  </Grid>
                 );
               }       
               else {
                 return (
-                  <div
+                  <Grid 
+                    item 
+                    xs={4}
                     className={classes.presetButton}
                     onClick={() => this.onDateChange(date)}
                   >
                     <span>{text}</span>
-                  </div>
+                  </Grid>
                 );
               }
             })}
 						{
 							selectedDate === calendarDate.format("MMM D").toString() ? 
 							(
-								<div
+                <Grid 
+                  item 
+                  xs={4}
 									className={
 										selectedDate  === calendarDate.format("MMM D").toString()
 											? [classes.selectedPresetButton, classes.presetButtonRight].join(
@@ -247,11 +251,16 @@ class DatePicker extends React.Component {
 											displayFormat="MMM D"
 										/>
 									</OutsideClickHandler>
-								</div>
+								</Grid>
 							) : (
-								<div className={classes.presetButton} onClick={this.handleClick}>
+                <Grid 
+                  item 
+                  xs={4} 
+                  className={classes.presetButton} 
+                  onClick={this.handleClick}
+                >
 									<span>Other</span>
-								</div>
+								</Grid>
 							)
 						}
           </Grid>
